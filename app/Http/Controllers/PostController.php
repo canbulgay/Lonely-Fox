@@ -12,7 +12,7 @@ class PostController extends Controller
 
     
         return view('posts',[
-        'posts' => $this->getPost(),
+        'posts' => Post::latest()->filter(request(['search']))->get(),
         'categories' => Category::all(),
         ]);
     }
@@ -24,14 +24,4 @@ class PostController extends Controller
         ]);
     }
 
-    protected function getPost(){
-        
-        $posts = Post::latest();
-        if(request('search')){
-            $posts->where('title','like','%'.request('search').'%')
-            ->orWhere('body','like','%'.request('search').'%');
-        }
-
-        return $posts->get();
-    }
 }
