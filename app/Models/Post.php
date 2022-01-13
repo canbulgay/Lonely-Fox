@@ -29,6 +29,11 @@ class Post extends Model
                     ->orWhere('body','like','%'.$search.'%');
             }
         });
+        $query->when($filters['category'] ?? false , fn($query,$category) =>
+            $query->whereHas('category', fn ($query) => 
+                $query->where('slug',$category))
+        
+    );
     }
 
     public function category()
