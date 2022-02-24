@@ -15,7 +15,7 @@ class RegisterController extends Controller
 
     public function store(){
 
-        request()->validate([
+        $attributes = request()->validate([
             'name' => 'required|max:255',
             'username' => 'required|max:255|min:3',
             'email' => 'required|email|max:255',
@@ -23,7 +23,7 @@ class RegisterController extends Controller
         ]);
 
         User::create([
-            request()->validated()
+            $attributes
         ]);
 
         return redirect('/');
