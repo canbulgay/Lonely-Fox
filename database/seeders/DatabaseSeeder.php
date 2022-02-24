@@ -19,8 +19,6 @@ class DatabaseSeeder extends Seeder
             'name' => "Can Bulgay"
         ]);
 
-        Post::factory(5)->create([
-            'user_id' => $user->id
-        ]);
+        Post::factory(20)->create();
     }
 }
