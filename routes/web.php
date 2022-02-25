@@ -7,6 +7,7 @@ use App\Models\Post;
 use App\Models\User;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\SessionController;
+use App\Services\Newsletter;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,14 +38,18 @@ Route::get('authors/{author:username}', function(User $author){
         ]);
 });
 
-Route::get('ping',function(){
-    $mailchimp = new \MailchimpMarketing\ApiClient();
+Route::post('newsletter',function(Newsletter $newsletter){
 
-$mailchimp->setConfig([
-	'apiKey' => config('services.mailchimp.key'),
-	'server' => 'us14'
-]);
+    request()->validate(['email' => 'required|email']);
+    try{
+        $newsletter->subscribe(request('email'));
 
-$response = $mailchimp->ping->get();
-ddd($response);
+    }catch(\Exception $e) {
+        throw \Illuminate\Validation\ValidationException::withMessages([
+            'email' => "this email could not be added our newsletter"
+        ]);
+    }
+
+    return redirect('/')->with('success','You are now signed up for our newsletter!');
+
 });
