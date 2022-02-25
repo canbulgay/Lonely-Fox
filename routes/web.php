@@ -36,3 +36,15 @@ Route::get('authors/{author:username}', function(User $author){
         'posts' => $author->posts,
         ]);
 });
+
+Route::get('ping',function(){
+    $mailchimp = new \MailchimpMarketing\ApiClient();
+
+$mailchimp->setConfig([
+	'apiKey' => config('services.mailchimp.key'),
+	'server' => 'us14'
+]);
+
+$response = $mailchimp->ping->get();
+ddd($response);
+});
