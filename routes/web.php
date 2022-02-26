@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\PostController;
 use App\Models\Category;
 use Illuminate\Support\Facades\Route;
@@ -38,18 +39,7 @@ Route::get('authors/{author:username}', function(User $author){
         ]);
 });
 
-Route::post('newsletter',function(Newsletter $newsletter){
+Route::post('newsletter',NewsletterController::class);
 
-    request()->validate(['email' => 'required|email']);
-    try{
-        $newsletter->subscribe(request('email'));
-
-    }catch(\Exception $e) {
-        throw \Illuminate\Validation\ValidationException::withMessages([
-            'email' => "this email could not be added our newsletter"
-        ]);
-    }
-
-    return redirect('/')->with('success','You are now signed up for our newsletter!');
-
-});
+Route::get('admin/posts/create',[PostController::class,'create']);
+Route::get('admin/posts/store',[PostController::class,'store']);
